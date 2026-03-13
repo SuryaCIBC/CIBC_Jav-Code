@@ -1,0 +1,4 @@
+com\example\xmlsign\Main.class
+com\example\xmlsign\BarbadosTimeUtil.class
+com\example\xmlsign\XmlSignatureAlgorithms.class
+com\example\xmlsign\XmlSigner.class
