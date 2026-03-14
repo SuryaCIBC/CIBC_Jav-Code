@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdr:Message xmlns:hdr="urn:montran:message.01">
+    <hdr:AppHdr xmlns="urn:iso:std:iso:20022:tech:xsd:head.001.001.03">
+        <Fr>
+            <FIId>
+                <FinInstnId>
+                    <BICFI>CBABBBB0IPS</BICFI>
+                </FinInstnId>
+            </FIId>
+        </Fr>
+        <To>
+            <FIId>
+                <FinInstnId>
+                    <BICFI>FCIBBBB0</BICFI>
+                </FinInstnId>
+            </FIId>
+        </To>
+        <BizMsgIdr>PS202603140000002401</BizMsgIdr>
+        <MsgDefIdr>pacs.002.001.14</MsgDefIdr>
+        <CreDt>2026-03-14T04:23:22Z</CreDt>
+        <Sgntr>
+            <dsig:Signature xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+                <dsig:SignedInfo>
+                    <dsig:CanonicalizationMethod Algorithm="http://www.w3.org/2006/12/xml-c14n11"></dsig:CanonicalizationMethod>
+                    <dsig:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"></dsig:SignatureMethod>
+                    <dsig:Reference URI="">
+                        <dsig:Transforms>
+                            <dsig:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"></dsig:Transform>
+                            <dsig:Transform Algorithm="http://www.w3.org/2006/12/xml-c14n11"></dsig:Transform>
+                        </dsig:Transforms>
+                        <dsig:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></dsig:DigestMethod>
+                        <dsig:DigestValue>9Gdz+wjsOFuhBTvrWo8si+yzKJ/vClIqf6p82VBVlzc=</dsig:DigestValue>
+                    </dsig:Reference>
+                </dsig:SignedInfo>
+                <dsig:SignatureValue>eh2/zi/IQsJ1oahR6qcZK6a7jHVef0DBoC+SniIjkeyQswEmTVsGZkEvJuEpaURN/S36HP/aIbQH
+ZOAtB2lqOFvICEiVDJmPkrIHc+jS3LnqKq1k9iiaBL6wDxwa+RS49bOAfq9VIlutD+vo8tZzNDMy
+y+xDPptu7XZ4mHKBXx3F7fcMortFIuZQ7Hoqrvkqg1t96baeAYwSnkO3DO/jDZXOMH+sk9EAFBWb
+j/gYWoYb/tk7MrBRIAJg/PegnpbIu49BuqKraWcjRpiFhreq1RxaFTTaSIqcXHWDDuSomkex4MFG
+MovlMC6crUrlgRfc+mKQ3UGUrfxzi0t1uLRaUQ==</dsig:SignatureValue>
+                <dsig:KeyInfo>
+                    <dsig:X509Data>
+                        <dsig:X509IssuerSerial>
+                            <dsig:X509IssuerName>C=EC,O=Montran,CN=TestCAMontranQuito</dsig:X509IssuerName>
+                            <dsig:X509SerialNumber>640595737042482273562455192844407099841881725849</dsig:X509SerialNumber>
+                        </dsig:X509IssuerSerial>
+                    </dsig:X509Data>
+                </dsig:KeyInfo>
+            </dsig:Signature>
+        </Sgntr>
+    </hdr:AppHdr>
+    <hdr:FIToFIPmtStsRpt xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.002.001.14">
+        <GrpHdr>
+            <MsgId>PS202603140000002401</MsgId>
+            <CreDtTm>2026-03-14T00:23:22-04:00</CreDtTm>
+            <InstdAgt>
+                <FinInstnId>
+                    <BICFI>FCIBBBB0</BICFI>
+                </FinInstnId>
+            </InstdAgt>
+        </GrpHdr>
+        <OrgnlGrpInfAndSts>
+            <OrgnlMsgId>RSYS460220C056254</OrgnlMsgId>
+            <OrgnlMsgNmId>pacs.008.001.12</OrgnlMsgNmId>
+        </OrgnlGrpInfAndSts>
+        <TxInfAndSts>
+            <StsId>PS202603140000002401</StsId>
+            <OrgnlInstrId>RSYSCIBCTEST1</OrgnlInstrId>
+            <OrgnlEndToEndId>7a7570b6-492b-438d-b472-9d5adaf099g</OrgnlEndToEndId>
+            <OrgnlTxId>RSYSCIBCTEST1</OrgnlTxId>
+            <TxSts>RJCT</TxSts>
+            <StsRsnInf>
+                <Orgtr>
+                    <Id>
+                        <OrgId>
+                            <AnyBIC>CBABBBB0IPS</AnyBIC>
+                        </OrgId>
+                    </Id>
+                </Orgtr>
+                <Rsn>
+                    <Cd>AB05</Cd>
+                </Rsn>
+                <AddtlInf>Invalid Origination Time: 2026-03-14 00:18:27.724</AddtlInf>
+            </StsRsnInf>
+            <AccptncDtTm>2026-03-14T00:18:27.7240516-04:00</AccptncDtTm>
+            <OrgnlTxRef>
+                <PmtTpInf>
+                    <SvcLvl>
+                        <Prtry>SENT</Prtry>
+                    </SvcLvl>
+                    <LclInstrm>
+                        <Cd>INST</Cd>
+                    </LclInstrm>
+                    <CtgyPurp>
+                        <Cd>CT</Cd>
+                    </CtgyPurp>
+                </PmtTpInf>
+                <DbtrAgt>
+                    <FinInstnId>
+                        <BICFI>FCIBBBB0</BICFI>
+                    </FinInstnId>
+                    <BrnchId>
+                        <Id>1234</Id>
+                    </BrnchId>
+                </DbtrAgt>
+            </OrgnlTxRef>
+        </TxInfAndSts>
+    </hdr:FIToFIPmtStsRpt>
+</hdr:Message>
