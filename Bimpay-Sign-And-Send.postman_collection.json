@@ -1,0 +1,211 @@
+{
+  "info": {
+    "_postman_id": "7e0a7d3c-5a54-4f1d-9f5a-8f2b917e2cf8",
+    "name": "Bimpay Sign And Send",
+    "description": "Two-step flow: sign XML with local Java app, then send signed XML to bimpay endpoint.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "bimpay_url",
+      "value": "https://<YOUR_BIMPAY_ENDPOINT>",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01_SIGN_LOCAL",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "function pad(n, w = 2) { return String(n).padStart(w, \"0\"); }",
+              "",
+              "function isoWithOffset(date = new Date()) {",
+              "  const y = date.getFullYear();",
+              "  const m = pad(date.getMonth() + 1);",
+              "  const d = pad(date.getDate());",
+              "  const hh = pad(date.getHours());",
+              "  const mm = pad(date.getMinutes());",
+              "  const ss = pad(date.getSeconds());",
+              "  const ms = pad(date.getMilliseconds(), 3);",
+              "  const tzMin = -date.getTimezoneOffset();",
+              "  const sign = tzMin >= 0 ? \"+\" : \"-\";",
+              "  const tzh = pad(Math.floor(Math.abs(tzMin) / 60));",
+              "  const tzm = pad(Math.abs(tzMin) % 60);",
+              "  return `${y}-${m}-${d}T${hh}:${mm}:${ss}.${ms}${sign}${tzh}:${tzm}`;",
+              "}",
+              "",
+              "function ymd(date = new Date()) {",
+              "  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;",
+              "}",
+              "",
+              "function uniq(prefix) {",
+              "  const d = new Date();",
+              "  return `${prefix}${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}${pad(d.getMilliseconds(),3)}${Math.floor(Math.random()*1000000)}`;",
+              "}",
+              "",
+              "const nowTs = isoWithOffset(new Date());",
+              "const sttlmDate = ymd(new Date());",
+              "",
+              "// hardcoded constants requested",
+              "const senderBic = \"FCIBBBB0\";",
+              "const receiverBic = \"CBABBBB0IPS\";",
+              "const creditorBic = \"ACKPBBB0\";",
+              "const ccy = \"BBD\";",
+              "const amount = \"205.32\";",
+              "",
+              "// unique IDs every run",
+              "const bizMsgId = uniq(\"FCIB\");",
+              "const grpMsgId = uniq(\"FCIBBB\");",
+              "const instrId = uniq(\"FCIBI\");",
+              "const txId = uniq(\"FCIBT\");",
+              "const endToEndId = pm.variables.replaceIn(\"{{$guid}}\");",
+              "",
+              "// debug values",
+              "pm.environment.set(\"bizMsgId\", bizMsgId);",
+              "pm.environment.set(\"grpMsgId\", grpMsgId);",
+              "pm.environment.set(\"instrId\", instrId);",
+              "pm.environment.set(\"txId\", txId);",
+              "pm.environment.set(\"endToEndId\", endToEndId);",
+              "",
+              "const xml = `<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+              "<env:Message xmlns:env=\"urn:montran:message.01\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">",
+              "  <env:AppHdr xmlns=\"urn:iso:std:iso:20022:tech:xsd:head.001.001.03\">",
+              "    <Fr><FIId><FinInstnId><BICFI>${senderBic}</BICFI></FinInstnId></FIId></Fr>",
+              "    <To><FIId><FinInstnId><BICFI>${receiverBic}</BICFI></FinInstnId></FIId></To>",
+              "    <BizMsgIdr>${bizMsgId}</BizMsgIdr>",
+              "    <MsgDefIdr>pacs.008.001.12</MsgDefIdr>",
+              "    <BizSvc>RTP</BizSvc>",
+              "    <Prty>PAPSS</Prty>",
+              "    <CreDt>${nowTs}</CreDt>",
+              "  </env:AppHdr>",
+              "",
+              "  <env:FIToFICstmrCdtTrf xmlns=\"urn:iso:std:iso:20022:tech:xsd:pacs.008.001.12\">",
+              "    <GrpHdr>",
+              "      <MsgId>${grpMsgId}</MsgId>",
+              "      <CreDtTm>${nowTs}</CreDtTm>",
+              "      <NbOfTxs>1</NbOfTxs>",
+              "      <TtlIntrBkSttlmAmt Ccy=\"${ccy}\">${amount}</TtlIntrBkSttlmAmt>",
+              "      <IntrBkSttlmDt>${sttlmDate}</IntrBkSttlmDt>",
+              "      <SttlmInf><SttlmMtd>CLRG</SttlmMtd><ClrSys><Prtry>SENT</Prtry></ClrSys></SttlmInf>",
+              "      <PmtTpInf>",
+              "        <SvcLvl><Prtry>SENT</Prtry></SvcLvl>",
+              "        <LclInstrm><Cd>INST</Cd></LclInstrm>",
+              "        <CtgyPurp><Cd>CT</Cd></CtgyPurp>",
+              "      </PmtTpInf>",
+              "      <InstgAgt><FinInstnId><BICFI>${senderBic}</BICFI></FinInstnId></InstgAgt>",
+              "    </GrpHdr>",
+              "",
+              "    <CdtTrfTxInf>",
+              "      <PmtId>",
+              "        <InstrId>${instrId}</InstrId>",
+              "        <EndToEndId>${endToEndId}</EndToEndId>",
+              "        <TxId>${txId}</TxId>",
+              "      </PmtId>",
+              "      <IntrBkSttlmAmt Ccy=\"${ccy}\">${amount}</IntrBkSttlmAmt>",
+              "      <AccptncDtTm>${nowTs}</AccptncDtTm>",
+              "      <ChrgBr>SLEV</ChrgBr>",
+              "      <Dbtr><Nm>Central Bank of Barbados</Nm></Dbtr>",
+              "      <DbtrAcct><Id><Othr><Id>346601</Id></Othr></Id></DbtrAcct>",
+              "      <DbtrAgt><FinInstnId><BICFI>${senderBic}</BICFI></FinInstnId><BrnchId><Id>1234</Id></BrnchId></DbtrAgt>",
+              "      <CdtrAgt><FinInstnId><BICFI>${creditorBic}</BICFI></FinInstnId><BrnchId><Id>4321</Id></BrnchId></CdtrAgt>",
+              "      <Cdtr><Nm>POS ACK PARTICIPANT TEST</Nm></Cdtr>",
+              "      <CdtrAcct><Id><Othr><Id>50000067466</Id></Othr></Id></CdtrAcct>",
+              "    </CdtTrfTxInf>",
+              "  </env:FIToFICstmrCdtTrf>",
+              "</env:Message>`;",
+              "",
+              "pm.environment.set(\"unsigned_xml\", xml);"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Sign API status 200\", function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "",
+              "const signed = pm.response.text()",
+              "  .replace(/>\\\\s+</g, \"><\")",
+              "  .replace(/\\\\r?\\\\n|\\\\r/g, \"\")",
+              "  .trim();",
+              "",
+              "pm.environment.set(\"signed_xml\", signed);",
+              "console.log(\"signed_xml updated\");"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/xml",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{{unsigned_xml}}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/sign",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "sign"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "02_SEND_BIMPAY",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (!pm.environment.get(\"signed_xml\")) {",
+              "  throw new Error(\"signed_xml missing. Run 01_SIGN_LOCAL first.\");",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/xml",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{{signed_xml}}"
+        },
+        "url": {
+          "raw": "{{bimpay_url}}",
+          "host": [
+            "{{bimpay_url}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
