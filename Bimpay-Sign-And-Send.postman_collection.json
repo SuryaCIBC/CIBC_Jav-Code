@@ -64,13 +64,6 @@
               "const txId = uniq(\"FCIBT\");",
               "const endToEndId = pm.variables.replaceIn(\"{{$guid}}\");",
               "",
-              "// debug values",
-              "pm.environment.set(\"bizMsgId\", bizMsgId);",
-              "pm.environment.set(\"grpMsgId\", grpMsgId);",
-              "pm.environment.set(\"instrId\", instrId);",
-              "pm.environment.set(\"txId\", txId);",
-              "pm.environment.set(\"endToEndId\", endToEndId);",
-              "",
               "const xml = `<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
               "<env:Message xmlns:env=\"urn:montran:message.01\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">",
               "  <env:AppHdr xmlns=\"urn:iso:std:iso:20022:tech:xsd:head.001.001.03\">",
@@ -118,7 +111,7 @@
               "  </env:FIToFICstmrCdtTrf>",
               "</env:Message>`;",
               "",
-              "pm.environment.set(\"unsigned_xml\", xml);"
+              "pm.collectionVariables.set(\"unsigned_xml\", xml);"
             ]
           }
         },
@@ -136,7 +129,7 @@
               "  .replace(/\\\\r?\\\\n|\\\\r/g, \"\")",
               "  .trim();",
               "",
-              "pm.environment.set(\"signed_xml\", signed);",
+              "pm.collectionVariables.set(\"signed_xml\", signed);",
               "console.log(\"signed_xml updated\");"
             ]
           }
@@ -178,7 +171,7 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "if (!pm.environment.get(\"signed_xml\")) {",
+              "if (!pm.collectionVariables.get(\"signed_xml\")) {",
               "  throw new Error(\"signed_xml missing. Run 01_SIGN_LOCAL first.\");",
               "}"
             ]
