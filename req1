@@ -14,11 +14,11 @@
                 </FinInstnId>
             </FIId>
         </To>
-        <BizMsgIdr>FCIB20260314010749293359337</BizMsgIdr>
+        <BizMsgIdr>FCIB20260314012852454788409</BizMsgIdr>
         <MsgDefIdr>pacs.008.001.12</MsgDefIdr>
         <BizSvc>RTP</BizSvc>
         <Prty>PAPSS</Prty>
-        <CreDt>2026-03-14T05:07:58.3280958Z</CreDt>
+        <CreDt>2026-03-14T05:29:00.8905002Z</CreDt>
         <Sgntr>
             <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
                 <SignedInfo>
@@ -30,10 +30,10 @@
                             <Transform Algorithm="http://www.w3.org/2006/12/xml-c14n11" />
                         </Transforms>
                         <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" />
-                        <DigestValue>1cw6/mJtePgOwJz5SCe4jo53NatKVQ2BLE9GRswrQKw=</DigestValue>
+                        <DigestValue>Fbhi5PVVnzZFXaNaekJ59DVQXxc7kEBn5rwO/eCWBFk=</DigestValue>
                     </Reference>
                 </SignedInfo>
-                <SignatureValue>iqoM1YEpJAZtvIme5rSR8h+CxxlENVT/qrpypcOfdwt/IGQoxwrt4gm3NUCOdmz214MiKHKOG7rNQNXAOndFG6VDdAK+JRJwMowvjKI+dKNBroT0P5egAQAY/fZsvzINBAVLXFv4FU8yOvBa2J07OUL3WRnqQefLbmbR8K74lm8hceLFC4J4MMAuhipjmPvvA3LpInuYT6IiglJK5U0iAuVJnib3JN7iUY9WkkYdlq6CrFEdJ+sk8sO8iSdcTk9UDWpCDTE9UMLHO85RNf3y3XuJCb5BdaC1HNrNA6RgAVG9wJDIbaIZOus20ZchvpAHRscW7tsOag6Lr8mvjJZvtw==</SignatureValue>
+                <SignatureValue>Ul4o7DRH2MQoVI14eg1Z0ZTxpGI7vGwl9KdqqFuwdNfhdCxmm6lPzLT5EvFKxYdk3Fhkg2T3CJIbycyjgWzaIPHwWt2skD9ywwhT72qymnwqT6jDgBsI1PmFpMlGh587uJAq4no/eoiXZBg+kOEgOb9YoauFWcetskYm8DYz5lBTg+kXPt4PBgtor0yBT2LZmL5MXEwnIh8TQlQ2sBnZSxfdnQMCiPmpus+ZGKqBYYvjbvK0uGlNQD/dSlf/L60sduFi5LFVXgIIRaenj/Oj7UdROe8UKHZaIVG96M7QWg8OT+Nka/82E8fc8h8kBwli8BsNuUIHMXUDI3tpw1IGQQ==</SignatureValue>
                 <KeyInfo>
                     <X509Data>
                         <X509SubjectName>CN=IPS_FCIBBBBB</X509SubjectName>
@@ -48,8 +48,8 @@
     </env:AppHdr>
     <env:FIToFICstmrCdtTrf xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.008.001.12">
         <GrpHdr>
-            <MsgId>FCIBBB20260314010749293871201</MsgId>
-            <CreDtTm>2026-03-14T01:07:58.3280958-04:00</CreDtTm>
+            <MsgId>FCIBBB20260314012852454443944</MsgId>
+            <CreDtTm>2026-03-14T01:29:00.8905002-04:00</CreDtTm>
             <NbOfTxs>1</NbOfTxs>
             <TtlIntrBkSttlmAmt Ccy="BBD">205.32</TtlIntrBkSttlmAmt>
             <IntrBkSttlmDt>2026-03-14-04:00</IntrBkSttlmDt>
@@ -78,12 +78,12 @@
         </GrpHdr>
         <CdtTrfTxInf>
             <PmtId>
-                <InstrId>FCIBI20260314010749293823706</InstrId>
-                <EndToEndId>82312944-0a00-4eab-9e2c-9180cb28ef89</EndToEndId>
-                <TxId>FCIBT20260314010749293813254</TxId>
+                <InstrId>FCIBI20260314012852454963686</InstrId>
+                <EndToEndId>b75bf46e-a53c-438e-ba43-33c456a9ab80</EndToEndId>
+                <TxId>FCIBT20260314012852454499014</TxId>
             </PmtId>
             <IntrBkSttlmAmt Ccy="BBD">205.32</IntrBkSttlmAmt>
-            <AccptncDtTm>2026-03-14T01:07:58.3280958-04:00</AccptncDtTm>
+            <AccptncDtTm>2026-03-14T01:29:00.8905002-04:00</AccptncDtTm>
             <ChrgBr>SLEV</ChrgBr>
             <Dbtr>
                 <Nm>Central Bank of Barbados</Nm>
