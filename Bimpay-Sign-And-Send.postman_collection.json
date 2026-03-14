@@ -1,17 +1,11 @@
 {
   "info": {
-    "_postman_id": "7e0a7d3c-5a54-4f1d-9f5a-8f2b917e2cf8",
+    "_postman_id": "42fa5698-8047-40f8-98a7-912f09d4f8c7",
     "name": "Bimpay Sign And Send",
     "description": "Two-step flow: sign XML with local Java app, then send signed XML to bimpay endpoint.",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52785930"
   },
-  "variable": [
-    {
-      "key": "bimpay_url",
-      "value": "https://<YOUR_BIMPAY_ENDPOINT>",
-      "type": "string"
-    }
-  ],
   "item": [
     {
       "name": "01_SIGN_LOCAL",
@@ -169,12 +163,14 @@
         {
           "listen": "prerequest",
           "script": {
-            "type": "text/javascript",
             "exec": [
               "if (!pm.collectionVariables.get(\"signed_xml\")) {",
               "  throw new Error(\"signed_xml missing. Run 01_SIGN_LOCAL first.\");",
               "}"
-            ]
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
           }
         }
       ],
@@ -192,13 +188,157 @@
           "raw": "{{signed_xml}}"
         },
         "url": {
-          "raw": "{{bimpay_url}}",
+          "raw": "https://{{bimpay-host}}/pe/Message",
+          "protocol": "https",
           "host": [
-            "{{bimpay_url}}"
+            "{{bimpay-host}}"
+          ],
+          "path": [
+            "pe",
+            "Message"
           ]
         }
       },
       "response": []
+    },
+    {
+      "name": "PACS.008 Copy",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.sendRequest({\r",
+              "\r",
+              "    url: 'http://localhost:8080/api/sign',\r",
+              "\r",
+              "    method: 'POST',\r",
+              "\r",
+              "    header: {\r",
+              "\r",
+              "        'Content-Type': 'application/xml'\r",
+              "\r",
+              "    },\r",
+              "\r",
+              "    body: {\r",
+              "\r",
+              "        mode: 'raw',\r",
+              "\r",
+              "        raw: '<?xml version=\"1.0\" encoding=\"UTF-8\"?><env:Message xmlns:env=\"urn:montran:message.01\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><env:AppHdr xmlns=\"urn:iso:std:iso:20022:tech:xsd:head.001.001.03\"><Fr><FIId><FinInstnId><BICFI>FCIBBBB0</BICFI></FinInstnId></FIId></Fr><To><FIId><FinInstnId><BICFI>CBABBBB0IPS</BICFI></FinInstnId></FIId></To><BizMsgIdr>RSYS460220C056254</BizMsgIdr><MsgDefIdr>pacs.008.001.12</MsgDefIdr><CreDt></CreDt></env:AppHdr><env:FIToFICstmrCdtTrf xmlns=\"urn:iso:std:iso:20022:tech:xsd:pacs.008.001.12\"><GrpHdr><MsgId>RSYS460220C056254</MsgId><CreDtTm></CreDtTm><NbOfTxs>1</NbOfTxs><TtlIntrBkSttlmAmt Ccy=\"BBD\">205.32</TtlIntrBkSttlmAmt><IntrBkSttlmDt></IntrBkSttlmDt><SttlmInf><SttlmMtd>CLRG</SttlmMtd><ClrSys><Prtry>SENT</Prtry></ClrSys></SttlmInf><PmtTpInf><SvcLvl><Prtry>SENT</Prtry></SvcLvl><LclInstrm><Cd>INST</Cd></LclInstrm><CtgyPurp><Cd>CT</Cd></CtgyPurp></PmtTpInf><InstgAgt><FinInstnId><BICFI>FCIBBBB0</BICFI></FinInstnId></InstgAgt></GrpHdr><CdtTrfTxInf><PmtId><InstrId>RSYSCIBCTEST1</InstrId><EndToEndId>7a7570b6-492b-438d-b472-9d5adaf099g</EndToEndId><TxId>RSYSCIBCTEST1</TxId></PmtId><IntrBkSttlmAmt Ccy=\"BBD\">205.32</IntrBkSttlmAmt><AccptncDtTm></AccptncDtTm><ChrgBr>SLEV</ChrgBr><UltmtDbtr><Nm>SALARIES</Nm><Id><OrgId><Othr><Id>0000000000012</Id></Othr></OrgId></Id></UltmtDbtr><Dbtr><Nm>Central Bank of Barbados</Nm></Dbtr><DbtrAcct><Id><Othr><Id>346601</Id></Othr></Id></DbtrAcct><DbtrAgt><FinInstnId><BICFI>FCIBBBB0</BICFI></FinInstnId><BrnchId><Id>1234</Id></BrnchId></DbtrAgt><CdtrAgt><FinInstnId><BICFI>ACKPBBB0</BICFI></FinInstnId><BrnchId><Id>4321</Id></BrnchId></CdtrAgt><Cdtr><Nm>POS ACK PARTICIPANT TEST</Nm></Cdtr><CdtrAcct><Id><Othr><Id>50000067466</Id></Othr></Id></CdtrAcct><UltmtCdtr><Nm>xRtpSendTest1</Nm><Id><OrgId><Othr><Id>0000000000888</Id></Othr></OrgId></Id></UltmtCdtr></CdtTrfTxInf></env:FIToFICstmrCdtTrf></env:Message>'\r",
+              "\r",
+              "    }\r",
+              "\r",
+              "}, function (err, res) {\r",
+              "\r",
+              "    if (err) {\r",
+              "\r",
+              "        console.log(\"Error calling API:\", err);\r",
+              "\r",
+              "    } else {\r",
+              "\r",
+              "        // Save response data into environment variable\r",
+              "\r",
+              "        let responseXml = res.text();\r",
+              "        //console.log(\"Resposne set:\", responseXml);\r",
+              "        //console.log(\"Resposne set:\", res);\r",
+              "\r",
+              "\r",
+              "\r",
+              "       // Remove all newline characters, tabs, extra spaces between tags\r",
+              "let singleLine = responseXml\r",
+              "    .replace(/>\\s+</g, '><')   // remove spaces/newlines between tags\r",
+              "    .replace(/\\r?\\n|\\r/g, '')  // remove line breaks\r",
+              "    .trim();\r",
+              "\r",
+              "// Set environment variable\r",
+              "pm.environment.set(\"response\", singleLine);\r",
+              "\r",
+              "console.log(\"Single line XML:\", singleLine);\r",
+              "\r",
+              "    }\r",
+              "\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-MONTRAN-RTP-Channel",
+            "value": "FCIBBBB0",
+            "type": "text"
+          },
+          {
+            "key": "X-MONTRAN-RTP-Version",
+            "value": "1",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{{response}}",
+          "options": {
+            "raw": {
+              "language": "xml"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://{{bimpay-host}}/pe/Message",
+          "protocol": "https",
+          "host": [
+            "{{bimpay-host}}"
+          ],
+          "path": [
+            "pe",
+            "Message"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "bimpay_url",
+      "value": "https://<YOUR_BIMPAY_ENDPOINT>"
+    },
+    {
+      "key": "signed_xml",
+      "value": ""
+    },
+    {
+      "key": "unsigned_xml",
+      "value": ""
     }
   ]
 }
