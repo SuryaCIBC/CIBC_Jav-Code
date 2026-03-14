@@ -1,0 +1,121 @@
+pm.sendRequest((() => {
+    // Build ISO date with timezone offset like: 2026-03-14T10:25:20.123-04:00
+    function toIsoWithOffset(date = new Date()) {
+        const pad = (n, z = 2) => String(n).padStart(z, "0");
+        const y = date.getFullYear();
+        const m = pad(date.getMonth() + 1);
+        const d = pad(date.getDate());
+        const hh = pad(date.getHours());
+        const mm = pad(date.getMinutes());
+        const ss = pad(date.getSeconds());
+        const ms = pad(date.getMilliseconds(), 3);
+
+        const tzMin = -date.getTimezoneOffset();
+        const sign = tzMin >= 0 ? "+" : "-";
+        const tzH = pad(Math.floor(Math.abs(tzMin) / 60));
+        const tzM = pad(Math.abs(tzMin) % 60);
+
+        return `${y}-${m}-${d}T${hh}:${mm}:${ss}.${ms}${sign}${tzH}:${tzM}`;
+    }
+
+    const now = new Date();
+    const nowIsoOffset = toIsoWithOffset(now); // for CreDt, CreDtTm, AccptncDtTm
+    const settlementDate = nowIsoOffset.slice(0, 10); // YYYY-MM-DD for IntrBkSttlmDt
+
+    // If you want unique IDs each run, uncomment:
+    // const unique = Date.now().toString();
+    // const bizMsgId = `RSYS${unique}`;
+    // const grpMsgId = bizMsgId;
+
+    const unsignedXml = `<?xml version="1.0" encoding="UTF-8"?>
+<env:Message xmlns:env="urn:montran:message.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <env:AppHdr xmlns="urn:iso:std:iso:20022:tech:xsd:head.001.001.03">
+    <Fr>
+      <FIId><FinInstnId><BICFI>FCIBBBB0</BICFI></FinInstnId></FIId>
+    </Fr>
+    <To>
+      <FIId><FinInstnId><BICFI>CBABBBB0IPS</BICFI></FinInstnId></FIId>
+    </To>
+    <BizMsgIdr>RSYS460220C056254</BizMsgIdr>
+    <MsgDefIdr>pacs.008.001.12</MsgDefIdr>
+    <CreDt>${nowIsoOffset}</CreDt>
+  </env:AppHdr>
+
+  <env:FIToFICstmrCdtTrf xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.008.001.12">
+    <GrpHdr>
+      <MsgId>RSYS460220C056254</MsgId>
+      <CreDtTm>${nowIsoOffset}</CreDtTm>
+      <NbOfTxs>1</NbOfTxs>
+      <TtlIntrBkSttlmAmt Ccy="BBD">205.32</TtlIntrBkSttlmAmt>
+      <IntrBkSttlmDt>${settlementDate}</IntrBkSttlmDt>
+      <SttlmInf>
+        <SttlmMtd>CLRG</SttlmMtd>
+        <ClrSys><Prtry>SENT</Prtry></ClrSys>
+      </SttlmInf>
+      <PmtTpInf>
+        <SvcLvl><Prtry>SENT</Prtry></SvcLvl>
+        <LclInstrm><Cd>INST</Cd></LclInstrm>
+        <CtgyPurp><Cd>CT</Cd></CtgyPurp>
+      </PmtTpInf>
+      <InstgAgt><FinInstnId><BICFI>FCIBBBB0</BICFI></FinInstnId></InstgAgt>
+    </GrpHdr>
+
+    <CdtTrfTxInf>
+      <PmtId>
+        <InstrId>RSYSCIBCTEST1</InstrId>
+        <EndToEndId>7a7570b6-492b-438d-b472-9d5adaf099g</EndToEndId>
+        <TxId>RSYSCIBCTEST1</TxId>
+      </PmtId>
+      <IntrBkSttlmAmt Ccy="BBD">205.32</IntrBkSttlmAmt>
+      <AccptncDtTm>${nowIsoOffset}</AccptncDtTm>
+      <ChrgBr>SLEV</ChrgBr>
+      <UltmtDbtr>
+        <Nm>SALARIES</Nm>
+        <Id><OrgId><Othr><Id>0000000000012</Id></Othr></OrgId></Id>
+      </UltmtDbtr>
+      <Dbtr><Nm>Central Bank of Barbados</Nm></Dbtr>
+      <DbtrAcct><Id><Othr><Id>346601</Id></Othr></Id></DbtrAcct>
+      <DbtrAgt>
+        <FinInstnId><BICFI>FCIBBBB0</BICFI></FinInstnId>
+        <BrnchId><Id>1234</Id></BrnchId>
+      </DbtrAgt>
+      <CdtrAgt>
+        <FinInstnId><BICFI>ACKPBBB0</BICFI></FinInstnId>
+        <BrnchId><Id>4321</Id></BrnchId>
+      </CdtrAgt>
+      <Cdtr><Nm>POS ACK PARTICIPANT TEST</Nm></Cdtr>
+      <CdtrAcct><Id><Othr><Id>50000067466</Id></Othr></Id></CdtrAcct>
+      <UltmtCdtr>
+        <Nm>xRtpSendTest1</Nm>
+        <Id><OrgId><Othr><Id>0000000000888</Id></Othr></OrgId></Id>
+      </UltmtCdtr>
+    </CdtTrfTxInf>
+  </env:FIToFICstmrCdtTrf>
+</env:Message>`;
+
+    return {
+        url: "http://localhost:8080/api/sign",
+        method: "POST",
+        header: { "Content-Type": "application/xml" },
+        body: { mode: "raw", raw: unsignedXml }
+    };
+})(), function (err, res) {
+    if (err) {
+        console.log("Error calling API:", err);
+        return;
+    }
+
+    const responseXml = res.text();
+    const singleLine = responseXml
+        .replace(/>\s+</g, "><")
+        .replace(/\r?\n|\r/g, "")
+        .trim();
+
+    // Keep your existing variable name
+    pm.environment.set("response", singleLine);
+
+    // Optional clearer name
+    pm.environment.set("signed_xml", singleLine);
+
+    console.log("Signed XML prepared.");
+});
