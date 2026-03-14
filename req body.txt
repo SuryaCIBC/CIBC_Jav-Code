@@ -1,0 +1,50 @@
+pm.sendRequest({
+
+    url: 'http://localhost:8080/api/sign',
+
+    method: 'POST',
+
+    header: {
+
+        'Content-Type': 'application/xml'
+
+    },
+
+    body: {
+
+        mode: 'raw',
+
+        raw: '<?xml version="1.0" encoding="UTF-8"?><env:Message xmlns:env="urn:montran:message.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><env:AppHdr xmlns="urn:iso:std:iso:20022:tech:xsd:head.001.001.03"><Fr><FIId><FinInstnId><BICFI>FCIBBBB0</BICFI></FinInstnId></FIId></Fr><To><FIId><FinInstnId><BICFI>CBABBBB0IPS</BICFI></FinInstnId></FIId></To><BizMsgIdr>RSYS460220C056254</BizMsgIdr><MsgDefIdr>pacs.008.001.12</MsgDefIdr><CreDt></CreDt></env:AppHdr><env:FIToFICstmrCdtTrf xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.008.001.12"><GrpHdr><MsgId>RSYS460220C056254</MsgId><CreDtTm></CreDtTm><NbOfTxs>1</NbOfTxs><TtlIntrBkSttlmAmt Ccy="BBD">205.32</TtlIntrBkSttlmAmt><IntrBkSttlmDt></IntrBkSttlmDt><SttlmInf><SttlmMtd>CLRG</SttlmMtd><ClrSys><Prtry>SENT</Prtry></ClrSys></SttlmInf><PmtTpInf><SvcLvl><Prtry>SENT</Prtry></SvcLvl><LclInstrm><Cd>INST</Cd></LclInstrm><CtgyPurp><Cd>CT</Cd></CtgyPurp></PmtTpInf><InstgAgt><FinInstnId><BICFI>FCIBBBB0</BICFI></FinInstnId></InstgAgt></GrpHdr><CdtTrfTxInf><PmtId><InstrId>RSYSCIBCTEST1</InstrId><EndToEndId>7a7570b6-492b-438d-b472-9d5adaf099g</EndToEndId><TxId>RSYSCIBCTEST1</TxId></PmtId><IntrBkSttlmAmt Ccy="BBD">205.32</IntrBkSttlmAmt><AccptncDtTm></AccptncDtTm><ChrgBr>SLEV</ChrgBr><UltmtDbtr><Nm>SALARIES</Nm><Id><OrgId><Othr><Id>0000000000012</Id></Othr></OrgId></Id></UltmtDbtr><Dbtr><Nm>Central Bank of Barbados</Nm></Dbtr><DbtrAcct><Id><Othr><Id>346601</Id></Othr></Id></DbtrAcct><DbtrAgt><FinInstnId><BICFI>FCIBBBB0</BICFI></FinInstnId><BrnchId><Id>1234</Id></BrnchId></DbtrAgt><CdtrAgt><FinInstnId><BICFI>ACKPBBB0</BICFI></FinInstnId><BrnchId><Id>4321</Id></BrnchId></CdtrAgt><Cdtr><Nm>POS ACK PARTICIPANT TEST</Nm></Cdtr><CdtrAcct><Id><Othr><Id>50000067466</Id></Othr></Id></CdtrAcct><UltmtCdtr><Nm>xRtpSendTest1</Nm><Id><OrgId><Othr><Id>0000000000888</Id></Othr></OrgId></Id></UltmtCdtr></CdtTrfTxInf></env:FIToFICstmrCdtTrf></env:Message>'
+
+    }
+
+}, function (err, res) {
+
+    if (err) {
+
+        console.log("Error calling API:", err);
+
+    } else {
+
+        // Save response data into environment variable
+
+        let responseXml = res.text();
+        //console.log("Resposne set:", responseXml);
+        //console.log("Resposne set:", res);
+
+
+
+       // Remove all newline characters, tabs, extra spaces between tags
+let singleLine = responseXml
+    .replace(/>\s+</g, '><')   // remove spaces/newlines between tags
+    .replace(/\r?\n|\r/g, '')  // remove line breaks
+    .trim();
+
+// Set environment variable
+pm.environment.set("response", singleLine);
+
+console.log("Single line XML:", singleLine);
+
+    }
+
+});
