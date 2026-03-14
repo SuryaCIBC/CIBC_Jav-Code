@@ -1,0 +1,126 @@
+<env:Message xmlns:env="urn:montran:message.01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <env:AppHdr xmlns="urn:iso:std:iso:20022:tech:xsd:head.001.001.03">
+        <Fr>
+            <FIId>
+                <FinInstnId>
+                    <BICFI>FCIBBBB0</BICFI>
+                </FinInstnId>
+            </FIId>
+        </Fr>
+        <To>
+            <FIId>
+                <FinInstnId>
+                    <BICFI>CBABBBB0IPS</BICFI>
+                </FinInstnId>
+            </FIId>
+        </To>
+        <BizMsgIdr>FCIB20260314010749293359337</BizMsgIdr>
+        <MsgDefIdr>pacs.008.001.12</MsgDefIdr>
+        <BizSvc>RTP</BizSvc>
+        <Prty>PAPSS</Prty>
+        <CreDt>2026-03-14T05:07:58.3280958Z</CreDt>
+        <Sgntr>
+            <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+                <SignedInfo>
+                    <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" />
+                    <SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" />
+                    <Reference URI="">
+                        <Transforms>
+                            <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+                            <Transform Algorithm="http://www.w3.org/2006/12/xml-c14n11" />
+                        </Transforms>
+                        <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" />
+                        <DigestValue>1cw6/mJtePgOwJz5SCe4jo53NatKVQ2BLE9GRswrQKw=</DigestValue>
+                    </Reference>
+                </SignedInfo>
+                <SignatureValue>iqoM1YEpJAZtvIme5rSR8h+CxxlENVT/qrpypcOfdwt/IGQoxwrt4gm3NUCOdmz214MiKHKOG7rNQNXAOndFG6VDdAK+JRJwMowvjKI+dKNBroT0P5egAQAY/fZsvzINBAVLXFv4FU8yOvBa2J07OUL3WRnqQefLbmbR8K74lm8hceLFC4J4MMAuhipjmPvvA3LpInuYT6IiglJK5U0iAuVJnib3JN7iUY9WkkYdlq6CrFEdJ+sk8sO8iSdcTk9UDWpCDTE9UMLHO85RNf3y3XuJCb5BdaC1HNrNA6RgAVG9wJDIbaIZOus20ZchvpAHRscW7tsOag6Lr8mvjJZvtw==</SignatureValue>
+                <KeyInfo>
+                    <X509Data>
+                        <X509SubjectName>CN=IPS_FCIBBBBB</X509SubjectName>
+                        <X509IssuerSerial>
+                            <X509IssuerName>C=EC, O=Montran, CN=TestCAMontranQuito</X509IssuerName>
+                            <X509SerialNumber>508377069001822204840760307940340597670095453532</X509SerialNumber>
+                        </X509IssuerSerial>
+                    </X509Data>
+                </KeyInfo>
+            </Signature>
+        </Sgntr>
+    </env:AppHdr>
+    <env:FIToFICstmrCdtTrf xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.008.001.12">
+        <GrpHdr>
+            <MsgId>FCIBBB20260314010749293871201</MsgId>
+            <CreDtTm>2026-03-14T01:07:58.3280958-04:00</CreDtTm>
+            <NbOfTxs>1</NbOfTxs>
+            <TtlIntrBkSttlmAmt Ccy="BBD">205.32</TtlIntrBkSttlmAmt>
+            <IntrBkSttlmDt>2026-03-14-04:00</IntrBkSttlmDt>
+            <SttlmInf>
+                <SttlmMtd>CLRG</SttlmMtd>
+                <ClrSys>
+                    <Prtry>SENT</Prtry>
+                </ClrSys>
+            </SttlmInf>
+            <PmtTpInf>
+                <SvcLvl>
+                    <Prtry>SENT</Prtry>
+                </SvcLvl>
+                <LclInstrm>
+                    <Cd>INST</Cd>
+                </LclInstrm>
+                <CtgyPurp>
+                    <Cd>CT</Cd>
+                </CtgyPurp>
+            </PmtTpInf>
+            <InstgAgt>
+                <FinInstnId>
+                    <BICFI>FCIBBBB0</BICFI>
+                </FinInstnId>
+            </InstgAgt>
+        </GrpHdr>
+        <CdtTrfTxInf>
+            <PmtId>
+                <InstrId>FCIBI20260314010749293823706</InstrId>
+                <EndToEndId>82312944-0a00-4eab-9e2c-9180cb28ef89</EndToEndId>
+                <TxId>FCIBT20260314010749293813254</TxId>
+            </PmtId>
+            <IntrBkSttlmAmt Ccy="BBD">205.32</IntrBkSttlmAmt>
+            <AccptncDtTm>2026-03-14T01:07:58.3280958-04:00</AccptncDtTm>
+            <ChrgBr>SLEV</ChrgBr>
+            <Dbtr>
+                <Nm>Central Bank of Barbados</Nm>
+            </Dbtr>
+            <DbtrAcct>
+                <Id>
+                    <Othr>
+                        <Id>346601</Id>
+                    </Othr>
+                </Id>
+            </DbtrAcct>
+            <DbtrAgt>
+                <FinInstnId>
+                    <BICFI>FCIBBBB0</BICFI>
+                </FinInstnId>
+                <BrnchId>
+                    <Id>1234</Id>
+                </BrnchId>
+            </DbtrAgt>
+            <CdtrAgt>
+                <FinInstnId>
+                    <BICFI>ACKPBBB0</BICFI>
+                </FinInstnId>
+                <BrnchId>
+                    <Id>4321</Id>
+                </BrnchId>
+            </CdtrAgt>
+            <Cdtr>
+                <Nm>POS ACK PARTICIPANT TEST</Nm>
+            </Cdtr>
+            <CdtrAcct>
+                <Id>
+                    <Othr>
+                        <Id>50000067466</Id>
+                    </Othr>
+                </Id>
+            </CdtrAcct>
+        </CdtTrfTxInf>
+    </env:FIToFICstmrCdtTrf>
+</env:Message>
