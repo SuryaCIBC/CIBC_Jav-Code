@@ -1,0 +1,1472 @@
+{
+	"info": {
+		"_postman_id": "96aa7a9b-0008-48d6-befe-2c840dafc2b6",
+		"name": "IPP Copy 3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "52785930"
+	},
+	"item": [
+		{
+			"name": "BPW",
+			"item": [
+				{
+					"name": "Active - Active",
+					"item": [
+						{
+							"name": "sendPayment - BPW",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const prefix = \"REQ\";\r",
+											"const timestamp = Date.now(); // current time in ms\r",
+											"const random = Math.floor(Math.random() * 1000);\r",
+											" \r",
+											"const reqId = prefix + timestamp + random;\r",
+											" \r",
+											"pm.environment.set(\"reqId\", reqId);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											" \r",
+											"// Extract values\r",
+											"let txnId = response.txnId;\r",
+											"let customerId = response.customerId;\r",
+											"let requestId = response.reqId;\r",
+											" \r",
+											"// Save to environment variables\r",
+											"pm.environment.set(\"txnId\", txnId);\r",
+											"pm.environment.set(\"customerId\", customerId);\r",
+											"pm.environment.set(\"reqId\", requestId)\r",
+											" \r",
+											"// Optional: print in console for debugging\r",
+											"console.log(\"Transaction ID:\", txnId);\r",
+											"console.log(\"Customer ID:\", customerId);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"debtor\": {\n    \"dbtrAcct\": \"1000331148\",\n    \"currencyCd\": \"BBD\",\n    \"acctTypeCd\": \"CURR\"\n  },\n  \"header\": {\n    \"channel\": \"IB\",\n    \"customerId\": \"1000331148\",\n    \"timestamp\": \"2026-03-20T04:35:25.306-04:00\",\n    \"reqId\": \"{{reqId}}\"\n  },\n  \"creditor\": {\n    \"cdtrAgtBIC\": \"BPWCBBB0\",\n    \"currencyCd\": \"BBD\",\n    \"cdtrAcct\": \"148402\",\n    \"cdtrName\": \"BPW Bank\",\n    \"cdtrAgtTransit\": \"001\",\n    \"cdtrAgtTransitLocation\": \"Broad Street\"\n  },\n  \"transaction\": {\n    \"amount\": \"10.00\",\n    \"rmtInf\": \"Maintenance\",\n    \"currency\": \"BBD\",\n    \"ctgyPurp\": \"MN\"\n  },\n  \"customParams\": {\n    \"purposeCd\": \"CB\"\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/sendPayment",
+									"protocol": "https",
+									"host": [
+										"10",
+										"28",
+										"20",
+										"168"
+									],
+									"port": "10010",
+									"path": [
+										"ippgat",
+										"ipp",
+										"channel",
+										"sendPayment"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "recallPayment - BPW",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const prefix = \"REC\";\r",
+											"const timestamp = Date.now(); // current time in ms\r",
+											"const random = Math.floor(Math.random() * 1000);\r",
+											" \r",
+											"const reqId = prefix + timestamp + random;\r",
+											" \r",
+											"pm.environment.set(\"recallReqId\", reqId);"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"header\": {\n    \"reqId\": \"{{recallReqId}}\",\n    \"customerId\": 1000331148,\n    \"channel\": \"IB\",\n    \"timestamp\": \"2026-03-20T08:35:54.441+00:0\"\n  },\n  \"transaction\": {\n    \"orgnlTxnId\": \"FCIB20260320000113245\",\n    \"orgnlAmt\": 10.00,\n    \"recallReason\": \"DUPL\"\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/recallPayment",
+									"protocol": "https",
+									"host": [
+										"10",
+										"28",
+										"20",
+										"168"
+									],
+									"port": "10010",
+									"path": [
+										"ippgat",
+										"ipp",
+										"channel",
+										"recallPayment"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "paymentInvestigation - BPW",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const prefix = \"ING\";\r",
+											"const timestamp = Date.now(); // current time in ms\r",
+											"const random = Math.floor(Math.random() * 1000);\r",
+											" \r",
+											"const reqId = prefix + timestamp + random;\r",
+											" \r",
+											"pm.environment.set(\"ingReq\", reqId);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"header\": {\n    \"reqId\": \"{{ingReq}}\",\n    \"customerId\": 1000331148,\n    \"channel\": \"IB\",\n    \"timestamp\": \"2026-03-20T07:52:10.286+00:00\"\n  },\n  \"orgnlTxnInfo\": {\n    \"orgnlReqId\": \"REQ1774002216594510\",\n    \"txnType\": \"008\"\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/paymentInvestigation",
+									"protocol": "https",
+									"host": [
+										"10",
+										"28",
+										"20",
+										"168"
+									],
+									"port": "10010",
+									"path": [
+										"ippgat",
+										"ipp",
+										"channel",
+										"paymentInvestigation"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "reqToPay - BPW",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const prefix = \"RTP\";\r",
+											"const timestamp = Date.now(); // current time in ms\r",
+											"const random = Math.floor(Math.random() * 1000);\r",
+											" \r",
+											"const reqId = prefix + timestamp + random;\r",
+											" \r",
+											"pm.environment.set(\"rtpReqId\", reqId);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"header\": {\n        \"reqId\": \"{{rtpReqId}}\",\n        \"customerId\": 1000331148,\n        \"channel\": \"MOB\",\n        \"timestamp\": \"2026-03-20T05:33:25.306-04:00\"\n    },\n    \"transaction\": {\n        \"amount\": 10.00,\n        \"currency\": \"BBD\",\n        \"rmtInf\": \"Bill Payment\",\n        \"reqdExctnDt\": 20260320,\n        \"instrPrty\": \"NORM\"\n    },\n    \"debtor\": {\n        \"dbtrAcct\": \"148402\",\n        \"dbtrName\": \"BPW Bank\",\n        \"dbtrAgtBIC\": \"BPWCBBB0\",\n        \"acctTypeCd\": \"SUSP\",\n        \"currencyCd\": \"BBD\"\n    },\n    \"creditor\": {\n        \"cdtrAcct\": \"1000331148\",\n        \"cdtrName\": \"CIBC\",\n        \"acctTypeCd\": \"SUSP\",\n        \"currencyCd\": \"BBD\"\n    },\n    \"customParams\": {\n        \"dbtrAgtTransit\": \"001\",\n        \"dbtrAgtTransitLocation\": \"Broad Street\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/reqToPay",
+									"protocol": "https",
+									"host": [
+										"10",
+										"28",
+										"20",
+										"168"
+									],
+									"port": "10010",
+									"path": [
+										"ippgat",
+										"ipp",
+										"channel",
+										"reqToPay"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Active - Closed",
+					"item": [
+						{
+							"name": "sendPayment - BPW",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const prefix = \"REQ\";\r",
+											"const timestamp = Date.now(); // current time in ms\r",
+											"const random = Math.floor(Math.random() * 1000);\r",
+											" \r",
+											"const reqId = prefix + timestamp + random;\r",
+											" \r",
+											"pm.environment.set(\"reqId\", reqId);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											" \r",
+											"// Extract values\r",
+											"let txnId = response.txnId;\r",
+											"let customerId = response.customerId;\r",
+											" \r",
+											"// Save to environment variables\r",
+											"pm.environment.set(\"txnId\", txnId);\r",
+											"pm.environment.set(\"customerId\", customerId);\r",
+											" \r",
+											"// Optional: print in console for debugging\r",
+											"console.log(\"Transaction ID:\", txnId);\r",
+											"console.log(\"Customer ID:\", customerId);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"debtor\": {\n    \"dbtrAcct\": \"1000331148\",\n    \"currencyCd\": \"BBD\",\n    \"acctTypeCd\": \"CURR\"\n  },\n  \"header\": {\n    \"channel\": \"IB\",\n    \"customerId\": \"1000331148\",\n    \"timestamp\": \"2026-03-20T04:35:25.306-04:00\",\n    \"reqId\": \"{{reqId}}\"\n  },\n  \"creditor\": {\n    \"cdtrAgtBIC\": \"BPWCBBB0\",\n    \"currencyCd\": \"BBD\",\n    \"cdtrAcct\": \"148409\",\n    \"cdtrName\": \"BPW Bank\",\n    \"cdtrAgtTransit\": \"001\",\n    \"cdtrAgtTransitLocation\": \"Broad Street\"\n  },\n  \"transaction\": {\n    \"amount\": \"10.00\",\n    \"rmtInf\": \"Maintenance\",\n    \"currency\": \"BBD\",\n    \"ctgyPurp\": \"MN\"\n  },\n  \"customParams\": {\n    \"purposeCd\": \"CB\"\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/sendPayment",
+									"protocol": "https",
+									"host": [
+										"10",
+										"28",
+										"20",
+										"168"
+									],
+									"port": "10010",
+									"path": [
+										"ippgat",
+										"ipp",
+										"channel",
+										"sendPayment"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "paymentInvestigation - BPW Copy",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const prefix = \"ING\";\r",
+											"const timestamp = Date.now(); // current time in ms\r",
+											"const random = Math.floor(Math.random() * 1000);\r",
+											" \r",
+											"const reqId = prefix + timestamp + random;\r",
+											" \r",
+											"pm.environment.set(\"ingReq\", reqId);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"header\": {\n    \"reqId\": \"{{ingReq}}\",\n    \"customerId\": 1000331148,\n    \"channel\": \"IB\",\n    \"timestamp\": \"2026-03-20T07:52:10.286+00:00\"\n  },\n  \"orgnlTxnInfo\": {\n    \"orgnlReqId\": \"REQ1774003802987594\",\n    \"txnType\": \"008\"\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/paymentInvestigation",
+									"protocol": "https",
+									"host": [
+										"10",
+										"28",
+										"20",
+										"168"
+									],
+									"port": "10010",
+									"path": [
+										"ippgat",
+										"ipp",
+										"channel",
+										"paymentInvestigation"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "reqToPay - BPW Copy",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const prefix = \"RTP\";\r",
+											"const timestamp = Date.now(); // current time in ms\r",
+											"const random = Math.floor(Math.random() * 1000);\r",
+											" \r",
+											"const reqId = prefix + timestamp + random;\r",
+											" \r",
+											"pm.environment.set(\"rtpReqId\", reqId);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"header\": {\n        \"reqId\": \"{{rtpReqId}}\",\n        \"customerId\": 1000331148,\n        \"channel\": \"MOB\",\n        \"timestamp\": \"2026-03-20T05:33:25.306-04:00\"\n    },\n    \"transaction\": {\n        \"amount\": 10.00,\n        \"currency\": \"BBD\",\n        \"rmtInf\": \"Bill Payment\",\n        \"reqdExctnDt\": 20260320,\n        \"instrPrty\": \"NORM\"\n    },\n    \"debtor\": {\n        \"dbtrAcct\": \"148409\",\n        \"dbtrName\": \"BPW Bank\",\n        \"dbtrAgtBIC\": \"BPWCBBB0\",\n        \"acctTypeCd\": \"SUSP\",\n        \"currencyCd\": \"BBD\"\n    },\n    \"creditor\": {\n        \"cdtrAcct\": \"1000331148\",\n        \"cdtrName\": \"CIBC\",\n        \"acctTypeCd\": \"SUSP\",\n        \"currencyCd\": \"BBD\"\n    },\n    \"customParams\": {\n        \"dbtrAgtTransit\": \"001\",\n        \"dbtrAgtTransitLocation\": \"Broad Street\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/reqToPay",
+									"protocol": "https",
+									"host": [
+										"10",
+										"28",
+										"20",
+										"168"
+									],
+									"port": "10010",
+									"path": [
+										"ippgat",
+										"ipp",
+										"channel",
+										"reqToPay"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Active - Dormat",
+					"item": [
+						{
+							"name": "sendPayment - BPW",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const prefix = \"REQ\";\r",
+											"const timestamp = Date.now(); // current time in ms\r",
+											"const random = Math.floor(Math.random() * 1000);\r",
+											" \r",
+											"const reqId = prefix + timestamp + random;\r",
+											" \r",
+											"pm.environment.set(\"reqId\", reqId);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											" \r",
+											"// Extract values\r",
+											"let txnId = response.txnId;\r",
+											"let customerId = response.customerId;\r",
+											" \r",
+											"// Save to environment variables\r",
+											"pm.environment.set(\"txnId\", txnId);\r",
+											"pm.environment.set(\"customerId\", customerId);\r",
+											" \r",
+											"// Optional: print in console for debugging\r",
+											"console.log(\"Transaction ID:\", txnId);\r",
+											"console.log(\"Customer ID:\", customerId);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"debtor\": {\n    \"dbtrAcct\": \"1000331148\",\n    \"currencyCd\": \"BBD\",\n    \"acctTypeCd\": \"CURR\"\n  },\n  \"header\": {\n    \"channel\": \"IB\",\n    \"customerId\": \"1000331148\",\n    \"timestamp\": \"2026-03-20T04:35:25.306-04:00\",\n    \"reqId\": \"{{reqId}}\"\n  },\n  \"creditor\": {\n    \"cdtrAgtBIC\": \"BPWCBBB0\",\n    \"currencyCd\": \"BBD\",\n    \"cdtrAcct\": \"149399\",\n    \"cdtrName\": \"BPW Bank\",\n    \"cdtrAgtTransit\": \"001\",\n    \"cdtrAgtTransitLocation\": \"Broad Street\"\n  },\n  \"transaction\": {\n    \"amount\": \"10.00\",\n    \"rmtInf\": \"Maintenance\",\n    \"currency\": \"BBD\",\n    \"ctgyPurp\": \"MN\"\n  },\n  \"customParams\": {\n    \"purposeCd\": \"CB\"\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/sendPayment",
+									"protocol": "https",
+									"host": [
+										"10",
+										"28",
+										"20",
+										"168"
+									],
+									"port": "10010",
+									"path": [
+										"ippgat",
+										"ipp",
+										"channel",
+										"sendPayment"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Active - Account Blocked",
+					"item": [
+						{
+							"name": "sendPayment - BPW",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const prefix = \"REQ\";\r",
+											"const timestamp = Date.now(); // current time in ms\r",
+											"const random = Math.floor(Math.random() * 1000);\r",
+											" \r",
+											"const reqId = prefix + timestamp + random;\r",
+											" \r",
+											"pm.environment.set(\"reqId\", reqId);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											" \r",
+											"// Extract values\r",
+											"let txnId = response.txnId;\r",
+											"let customerId = response.customerId;\r",
+											" \r",
+											"// Save to environment variables\r",
+											"pm.environment.set(\"txnId\", txnId);\r",
+											"pm.environment.set(\"customerId\", customerId);\r",
+											" \r",
+											"// Optional: print in console for debugging\r",
+											"console.log(\"Transaction ID:\", txnId);\r",
+											"console.log(\"Customer ID:\", customerId);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"debtor\": {\n    \"dbtrAcct\": \"1000331148\",\n    \"currencyCd\": \"BBD\",\n    \"acctTypeCd\": \"CURR\"\n  },\n  \"header\": {\n    \"channel\": \"IB\",\n    \"customerId\": \"1000331148\",\n    \"timestamp\": \"2026-03-20T04:35:25.306-04:00\",\n    \"reqId\": \"{{reqId}}\"\n  },\n  \"creditor\": {\n    \"cdtrAgtBIC\": \"BPWCBBB0\",\n    \"currencyCd\": \"BBD\",\n    \"cdtrAcct\": \"148412\",\n    \"cdtrName\": \"BPW Bank\",\n    \"cdtrAgtTransit\": \"001\",\n    \"cdtrAgtTransitLocation\": \"Broad Street\"\n  },\n  \"transaction\": {\n    \"amount\": \"10.00\",\n    \"rmtInf\": \"Maintenance\",\n    \"currency\": \"BBD\",\n    \"ctgyPurp\": \"MN\"\n  },\n  \"customParams\": {\n    \"purposeCd\": \"CB\"\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/sendPayment",
+									"protocol": "https",
+									"host": [
+										"10",
+										"28",
+										"20",
+										"168"
+									],
+									"port": "10010",
+									"path": [
+										"ippgat",
+										"ipp",
+										"channel",
+										"sendPayment"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Active - Loan",
+					"item": [
+						{
+							"name": "sendPayment - BPW",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const prefix = \"REQ\";\r",
+											"const timestamp = Date.now(); // current time in ms\r",
+											"const random = Math.floor(Math.random() * 1000);\r",
+											" \r",
+											"const reqId = prefix + timestamp + random;\r",
+											" \r",
+											"pm.environment.set(\"reqId\", reqId);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											" \r",
+											"// Extract values\r",
+											"let txnId = response.txnId;\r",
+											"let customerId = response.customerId;\r",
+											" \r",
+											"// Save to environment variables\r",
+											"pm.environment.set(\"txnId\", txnId);\r",
+											"pm.environment.set(\"customerId\", customerId);\r",
+											" \r",
+											"// Optional: print in console for debugging\r",
+											"console.log(\"Transaction ID:\", txnId);\r",
+											"console.log(\"Customer ID:\", customerId);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"debtor\": {\n    \"dbtrAcct\": \"1000331148\",\n    \"currencyCd\": \"BBD\",\n    \"acctTypeCd\": \"CURR\"\n  },\n  \"header\": {\n    \"channel\": \"IB\",\n    \"customerId\": \"1000331148\",\n    \"timestamp\": \"2026-03-20T04:35:25.306-04:00\",\n    \"reqId\": \"{{reqId}}\"\n  },\n  \"creditor\": {\n    \"cdtrAgtBIC\": \"BPWCBBB0\",\n    \"currencyCd\": \"BBD\",\n    \"cdtrAcct\": \"148408\",\n    \"cdtrName\": \"BPW Bank\",\n    \"cdtrAgtTransit\": \"001\",\n    \"cdtrAgtTransitLocation\": \"Broad Street\"\n  },\n  \"transaction\": {\n    \"amount\": \"10.00\",\n    \"rmtInf\": \"Maintenance\",\n    \"currency\": \"BBD\",\n    \"ctgyPurp\": \"MN\"\n  },\n  \"customParams\": {\n    \"purposeCd\": \"CB\"\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/sendPayment",
+									"protocol": "https",
+									"host": [
+										"10",
+										"28",
+										"20",
+										"168"
+									],
+									"port": "10010",
+									"path": [
+										"ippgat",
+										"ipp",
+										"channel",
+										"sendPayment"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "AFFINITY",
+			"item": []
+		},
+		{
+			"name": "accountInquiry",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Generate random reqId\r",
+							"function generateReqId() {\r",
+							"    return \"REQID_\" + crypto.randomUUID()\r",
+							"        .replace(/-/g, \"\")\r",
+							"        .substring(0, 20)\r",
+							"        .toUpperCase();\r",
+							"}\r",
+							"\r",
+							"// Store variables for this request only\r",
+							"pm.variables.set(\"reqId\", generateReqId());\r",
+							"pm.variables.set(\"currentTimestamp\", new Date().toISOString());"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"header\": {\r\n    \"reqId\": \"{{reqId}}\",\r\n    \"channel\": \"MOB\",\r\n    \"timestamp\": \"{{currentTimestamp}}\"\r\n  },\r\n  \"acctInqRequest\": [\r\n    {\r\n      \"customerId\": \"86004681376\",\r\n      \"acctInqId\": \"REQID021429850\",\r\n      \"acctId\": \"1234567890\",\r\n      \"acctName\": \"SIT Test Debtor\",\r\n      \"beneficiaryParticipant\": \"SBBLBBB0\",\r\n      \"currency\": \"BBD\",\r\n      \"otherId\": \"98069892002\",\r\n      \"acctSchmeNmCd\": \"W\"\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/accountInquiry",
+					"protocol": "https",
+					"host": [
+						"10",
+						"28",
+						"20",
+						"168"
+					],
+					"port": "10010",
+					"path": [
+						"ippgat",
+						"ipp",
+						"channel",
+						"accountInquiry"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "paymentInvestigation",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"header\": {\n    \"reqId\": \"REQ17739931177274883435\",\n    \"customerId\": 1000331148,\n    \"channel\": \"IB\",\n    \"timestamp\": \"2026-03-20T07:52:10.286+00:00\"\n  },\n  \"orgnlTxnInfo\": {\n    \"orgnlReqId\": \"REQ1773993117727484\",\n    \"txnType\": \"008\"\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/paymentInvestigation",
+					"protocol": "https",
+					"host": [
+						"10",
+						"28",
+						"20",
+						"168"
+					],
+					"port": "10010",
+					"path": [
+						"ippgat",
+						"ipp",
+						"channel",
+						"paymentInvestigation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "proxyLookup",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"header\": {\n    \"reqId\": \"CAC0E32D90C581246008\",\n    \"channel\": \"MOB\",\n    \"timestamp\": \"2024-12-29T15:07:43.497Z\"\n  },\n  \"lookupRequest\": [\n    {\n      \"customParams\": {\n        \"purposeCd\": \"LOOKUP\"\n      },\n      \"customerId\": \"8600468139\",\n      \"lookupId\": \"REQID021490238\",\n      \"aliasType\": \"MobNb\",\n      \"aliasValue\": \"+917022970000\",\n      \"getDefault\": \"false\"\n    }\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/proxyLookup",
+					"protocol": "https",
+					"host": [
+						"10",
+						"28",
+						"20",
+						"168"
+					],
+					"port": "10010",
+					"path": [
+						"ippgat",
+						"ipp",
+						"channel",
+						"proxyLookup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "proxyRegistration",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"header\": {\n    \"channel\": \"MOB\",\n    \"timestamp\": \"2022-12-29T15:07:43.497Z\",\n    \"reqId\": \"CAC0E32D90C58024DE6B8EF925857E96\"\n  },\n  \"registrationRequest\": [\n    {\n      \"customerId\": \"8600468134\",\n      \"regId\": \"CAC0E32D90C58024DE6B8EF925857E95\",\n      \"updatePartyDetails\": {\n        \"currencyCd\": \"BBD\",\n        \"otherId\": \"0512345678\",\n        \"acctTypeCd\": \"S\",\n        \"acctId\": \"20011835\",\n        \"acctName\": \"CIBC\",\n        \"ptyOtherId\": \"123456793\",\n        \"acctSchmeNmCd\": \"S\",\n        \"contactDetailList\": [\n          {\n            \"aliasValue\": \"+9170229733\",\n            \"isDefault\": false,\n            \"aliasType\": \"MobNb\"\n          }\n        ]\n      }\n    }\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/proxyRegistration",
+					"protocol": "https",
+					"host": [
+						"10",
+						"28",
+						"20",
+						"168"
+					],
+					"port": "10010",
+					"path": [
+						"ippgat",
+						"ipp",
+						"channel",
+						"proxyRegistration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "proxyRemove",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"header\": {\n    \"reqId\": \"CAC0E32D90C580246\",\n    \"channel\": \"MOB\",\n    \"timestamp\": \"2025-12-26T14:08:23\"\n  },\n  \"removalRequest\": [\n    {\n      \"customerId\": \"FranciscoMarchan01\",\n      \"remId\": \"M186793011717\",\n      \"registrationId\": \"M186793011717\",\n      \"requestType\": \"DEAC\",\n      \"customParams\": {\n        \"purposeCd\": \"PROXY\"\n      },\n      \"originalPartyDetails\": {\n        \"acctId\": \"98\",\n        \"acctName\": \"Francisco Marchan\",\n        \"contactDetailList\": [\n          {\n            \"aliasType\": \"CAM\",\n            \"aliasValue\": \"fxmarch@montra.ec\",\n            \"isDefault\": true\n          }\n        ]\n      }\n    }\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/proxyRemove",
+					"protocol": "https",
+					"host": [
+						"10",
+						"28",
+						"20",
+						"168"
+					],
+					"port": "10010",
+					"path": [
+						"ippgat",
+						"ipp",
+						"channel",
+						"proxyRemove"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "proxyUpdate",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"header\": {\n    \"reqId\": \"CAC0E32D90C5812477790\",\n    \"channel\": \"MOB\",\n    \"timestamp\": \"2024-12-29T15:07:43.497Z\"\n  },\n  \"modificationRequest\": [\n    {\n      \"customerId\": \"86004681350\",\n      \"modId\": \"REQID011211790\",\n      \"customParams\": {\n        \"purposeCd\": \"PROXY\"\n      },\n      \"originalPartyDetails\": {\n        \"acctId\": \"20011835\",\n        \"acctName\": \"CIBC\",\n        \"otherId\": \"0512345678\",\n        \"acctTypeCd\": \"S\",\n        \"currencyCd\": \"BBD\",\n        \"ptyOtherId\": \"123456793\",\n        \"acctSchmeNmCd\": \"S\",\n        \"contactDetailList\": [\n          {\n            \"aliasType\": \"MobNb\",\n            \"aliasValue\": \"+917022973347\",\n            \"isDefault\": false\n          }\n        ]\n      },\n      \"updatePartyDetails\": {\n        \"acctId\": \"20011835\",\n        \"acctName\": \"CIBC\",\n        \"otherId\": \"0512345678\",\n        \"acctTypeCd\": \"S\",\n        \"currencyCd\": \"BBD\",\n        \"ptyOtherId\": \"123456793\",\n        \"acctSchmeNmCd\": \"S\",\n        \"contactDetailList\": [\n          {\n            \"aliasType\": \"MobNb\",\n            \"aliasValue\": \"+917022973300\",\n            \"isDefault\": false\n          }\n        ]\n      }\n    }\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/proxyUpdate",
+					"protocol": "https",
+					"host": [
+						"10",
+						"28",
+						"20",
+						"168"
+					],
+					"port": "10010",
+					"path": [
+						"ippgat",
+						"ipp",
+						"channel",
+						"proxyUpdate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "recallPayment",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const prefix = \"REC\";\r",
+							"const timestamp = Date.now(); // current time in ms\r",
+							"const random = Math.floor(Math.random() * 1000);\r",
+							" \r",
+							"const reqId = prefix + timestamp + random;\r",
+							" \r",
+							"pm.environment.set(\"recallReqId\", reqId);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"header\": {\n    \"reqId\": \"824y238461874892759828949\",\n    \"customerId\": 1000331148,\n    \"channel\": \"IB\",\n    \"timestamp\": \"2026-03-20T07:52:10.286+00:00\"\n  },\n  \"transaction\": {\n    \"orgnlTxnId\": \"FCIB20260320000113240\",\n    \"orgnlAmt\": 10.00,\n    \"recallReason\": \"DUPL\"\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/recallPayment",
+					"protocol": "https",
+					"host": [
+						"10",
+						"28",
+						"20",
+						"168"
+					],
+					"port": "10010",
+					"path": [
+						"ippgat",
+						"ipp",
+						"channel",
+						"recallPayment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "rejectRecall",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"header\": {\n    \"reqId\": \"CAC0E32D90C57024DE6B8EF9258571B3Gdfgdx\",\n    \"customerId\": 8600468134,\n    \"channel\": \"MOB\",\n    \"timestamp\": \"2022-12-29T15:07:43.497Z\"\n  },\n  \"transaction\": {\n    \"orgnlTxnId\": \"{{txnId}}\",\n    \"reasonCode\": \"CUST\"\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/rejectRecall",
+					"protocol": "https",
+					"host": [
+						"10",
+						"28",
+						"20",
+						"168"
+					],
+					"port": "10010",
+					"path": [
+						"ippgat",
+						"ipp",
+						"channel",
+						"rejectRecall"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "reqToPay",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"header\": {\n        \"reqId\": \"TestingPain.013\",\n        \"customerId\": 1000331148,\n        \"channel\": \"MOB\",\n        \"timestamp\": \"2026-03-20T04:37:25.306-04:00\"\n    },\n    \"transaction\": {\n        \"amount\": 10.00,\n        \"currency\": \"BBD\",\n        \"rmtInf\": \"Bill Payment\",\n        \"reqdExctnDt\": 20260320,\n        \"instrPrty\": \"NORM\"\n    },\n    \"debtor\": {\n        \"dbtrAcct\": \"50120770001\",\n        \"dbtrName\": \"First Citizens 1\",\n        \"dbtrAgtBIC\": \"FCTTBBB0\",\n        \"otherId\": \"050123456789\",\n        \"acctTypeCd\": \"SUSP\",\n        \"currencyCd\": \"BBD\", \n   \"dbtrAgtTransit\": \"00001\" ,\n   \"dbtrAgtTransitLocation\": \"Broad Street\"\n    },\n    \"creditor\": {\n        \"cdtrAcct\": \"1000331148\",\n        \"cdtrName\": \"CIBC\",\n        \"otherId\": \"05012345658\",\n        \"acctTypeCd\": \"SUSP\",\n        \"currencyCd\": \"BBD\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/reqToPay",
+					"protocol": "https",
+					"host": [
+						"10",
+						"28",
+						"20",
+						"168"
+					],
+					"port": "10010",
+					"path": [
+						"ippgat",
+						"ipp",
+						"channel",
+						"reqToPay"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "reqToPayResp",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"header\": {\n    \"reqId\": \"REQID2349\",\n    \"customerId\": 8600468134,\n    \"channel\": \"MOB\",\n    \"timestamp\": \"2022-12-29T15:07:43.497Z\"\n  },\n  \"transaction\": {\n    \"orgnlReqId\": \"REQID12457\",\n    \"txnSts\": \"ACCP\",\n    \"stsRsnCode\": \"DUPL\",\n    \"stsAddInfo\": \"Duplicate\"\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/reqToPayResp",
+					"protocol": "https",
+					"host": [
+						"10",
+						"28",
+						"20",
+						"168"
+					],
+					"port": "10010",
+					"path": [
+						"ippgat",
+						"ipp",
+						"channel",
+						"reqToPayResp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "returnPayment",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"header\": {\n        \"channel\": \"MOB\",\n        \"customerId\": \"8600468134\",\n        \"timestamp\": \"2026-03-09T15:07:43.497Z\",\n        \"reqId\": \"CAC0E32110C57024DE600EF9258571B3G34\"\n    },\n    \"transaction\": {\n        \"amount\": \"2.00\",\n        \"rtrnReason\": \"DUPL\",\n        \"rtrnAddInfo\": \"Duplicate Payment\",\n        \"orgnlTxnId\": \"O2016040600BFFF1000000038\",\n        \"currency\": \"ILS\",\n        \"orgnlAmt\": \"2.00\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/returnPayment",
+					"protocol": "https",
+					"host": [
+						"10",
+						"28",
+						"20",
+						"168"
+					],
+					"port": "10010",
+					"path": [
+						"ippgat",
+						"ipp",
+						"channel",
+						"returnPayment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sendPayment",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const prefix = \"REQ\";\r",
+							"const timestamp = Date.now(); // current time in ms\r",
+							"const random = Math.floor(Math.random() * 1000);\r",
+							" \r",
+							"const reqId = prefix + timestamp + random;\r",
+							" \r",
+							"pm.environment.set(\"reqId\", reqId);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();\r",
+							" \r",
+							"// Extract values\r",
+							"let txnId = response.txnId;\r",
+							"let customerId = response.customerId;\r",
+							" \r",
+							"// Save to environment variables\r",
+							"pm.environment.set(\"txnId\", txnId);\r",
+							"pm.environment.set(\"customerId\", customerId);\r",
+							" \r",
+							"// Optional: print in console for debugging\r",
+							"console.log(\"Transaction ID:\", txnId);\r",
+							"console.log(\"Customer ID:\", customerId);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"debtor\": {\n    \"dbtrAcct\": \"10047430\",\n    \"currencyCd\": \"BBD\",\n    \"acctTypeCd\": \"CURR\"\n  },\n  \"header\": {\n    \"channel\": \"WEB\",\n    \"customerId\": \"SA-010-10204560\",\n    \"timestamp\": \"2026-03-04T19:19:25.306-04:00\",\n    \"reqId\": \"{{reqId}}\"\n  },\n  \"creditor\": {\n    \"cdtrAgtBIC\": \"ACKPBBB0\",\n    \"currencyCd\": \"BBD\",\n    \"cdtrAcct\": \"2110000323\",\n    \"cdtrName\": \"ACK Participant\",\n    \"cdtrAgtTransit\": \"01234\",\n    \"cdtrAgtTransitLocation\": \"Main Branch\"\n  },\n  \"transaction\": {\n    \"amount\": \"1.00\",\n    \"rmtInf\": \"Maintenance\",\n    \"currency\": \"BBD\",\n    \"ctgyPurp\": \"MN\"\n  },\n  \"customParams\": {\n    \"purposeCd\": \"CB\"\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/sendPayment",
+					"protocol": "https",
+					"host": [
+						"10",
+						"28",
+						"20",
+						"168"
+					],
+					"port": "10010",
+					"path": [
+						"ippgat",
+						"ipp",
+						"channel",
+						"sendPayment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sendPayment - Active",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const prefix = \"REQ\";\r",
+							"const timestamp = Date.now(); // current time in ms\r",
+							"const random = Math.floor(Math.random() * 1000);\r",
+							" \r",
+							"const reqId = prefix + timestamp + random;\r",
+							" \r",
+							"pm.environment.set(\"reqId\", reqId);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();\r",
+							" \r",
+							"// Extract values\r",
+							"let txnId = response.txnId;\r",
+							"let customerId = response.customerId;\r",
+							" \r",
+							"// Save to environment variables\r",
+							"pm.environment.set(\"txnId\", txnId);\r",
+							"pm.environment.set(\"customerId\", customerId);\r",
+							" \r",
+							"// Optional: print in console for debugging\r",
+							"console.log(\"Transaction ID:\", txnId);\r",
+							"console.log(\"Customer ID:\", customerId);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"debtor\": {\n    \"dbtrAcct\": \"10047430\",\n    \"currencyCd\": \"BBD\",\n    \"acctTypeCd\": \"CURR\"\n  },\n  \"header\": {\n    \"channel\": \"WEB\",\n    \"customerId\": \"SA-010-10204560\",\n    \"timestamp\": \"2026-03-04T19:19:25.306-04:00\",\n    \"reqId\": \"{{reqId}}\"\n  },\n  \"creditor\": {\n    \"cdtrAgtBIC\": \"ACKPBBB0\",\n    \"currencyCd\": \"BBD\",\n    \"cdtrAcct\": \"2110000323\",\n    \"cdtrName\": \"ACK Participant\",\n    \"cdtrAgtTransit\": \"01234\",\n    \"cdtrAgtTransitLocation\": \"Main Branch\"\n  },\n  \"transaction\": {\n    \"amount\": \"1.00\",\n    \"rmtInf\": \"Maintenance\",\n    \"currency\": \"BBD\",\n    \"ctgyPurp\": \"MN\"\n  },\n  \"customParams\": {\n    \"purposeCd\": \"CB\"\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/sendPayment",
+					"protocol": "https",
+					"host": [
+						"10",
+						"28",
+						"20",
+						"168"
+					],
+					"port": "10010",
+					"path": [
+						"ippgat",
+						"ipp",
+						"channel",
+						"sendPayment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sendPayment Copy",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const prefix = \"REQ\";\r",
+							"const timestamp = Date.now(); // current time in ms\r",
+							"const random = Math.floor(Math.random() * 1000);\r",
+							" \r",
+							"const reqId = prefix + timestamp + random;\r",
+							" \r",
+							"pm.environment.set(\"reqId\", reqId);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();\r",
+							" \r",
+							"// Extract values\r",
+							"let txnId = response.txnId;\r",
+							"let customerId = response.customerId;\r",
+							" \r",
+							"// Save to environment variables\r",
+							"pm.environment.set(\"txnId\", txnId);\r",
+							"pm.environment.set(\"customerId\", customerId);\r",
+							" \r",
+							"// Optional: print in console for debugging\r",
+							"console.log(\"Transaction ID:\", txnId);\r",
+							"console.log(\"Customer ID:\", customerId);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"debtor\": {\n    \"dbtrAcct\": \"1000331148\",\n    \"currencyCd\": \"BBD\",\n    \"acctTypeCd\": \"CURR\"\n  },\n  \"header\": {\n    \"channel\": \"IB\",\n    \"customerId\": \"1000331148\",\n    \"timestamp\": \"2026-03-20T03:37:25.306-04:00\",\n    \"reqId\": \"{{reqId}}\"\n  },\n  \"creditor\": {\n    \"cdtrAgtBIC\": \"FCTTBBB0\",\n    \"currencyCd\": \"BBD\",\n    \"cdtrAcct\": \"50120770001\",\n     \"cdtrName\": \"First Citizens 1\",\n     \"cdtrAgtTransit\": \"00001\",\n    \"cdtrAgtTransitLocation\": \"Broad Street\"\n  },\n  \"transaction\": {\n    \"amount\": \"10.00\",\n    \"rmtInf\": \"Maintenance\",\n    \"currency\": \"BBD\",\n    \"ctgyPurp\": \"MN\"\n  },\n  \"customParams\": {\n    \"purposeCd\": \"CB\"\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/sendPayment",
+					"protocol": "https",
+					"host": [
+						"10",
+						"28",
+						"20",
+						"168"
+					],
+					"port": "10010",
+					"path": [
+						"ippgat",
+						"ipp",
+						"channel",
+						"sendPayment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sendPayment Copy",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const prefix = \"REQ\";\r",
+							"const timestamp = Date.now(); // current time in ms\r",
+							"const random = Math.floor(Math.random() * 1000);\r",
+							" \r",
+							"const reqId = prefix + timestamp + random;\r",
+							" \r",
+							"pm.environment.set(\"reqId\", reqId);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();\r",
+							" \r",
+							"// Extract values\r",
+							"let txnId = response.txnId;\r",
+							"let customerId = response.customerId;\r",
+							" \r",
+							"// Save to environment variables\r",
+							"pm.environment.set(\"txnId\", txnId);\r",
+							"pm.environment.set(\"customerId\", customerId);\r",
+							" \r",
+							"// Optional: print in console for debugging\r",
+							"console.log(\"Transaction ID:\", txnId);\r",
+							"console.log(\"Customer ID:\", customerId);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"debtor\": {\n    \"dbtrAcct\": \"10047430\",\n    \"currencyCd\": \"BBD\",\n    \"acctTypeCd\": \"CURR\"\n  },\n  \"header\": {\n    \"channel\": \"WEB\",\n    \"customerId\": \"SA-010-10204560\",\n    \"timestamp\": \"2026-03-04T19:19:25.306-04:00\",\n    \"reqId\": \"{{reqId}}\"\n  },\n  \"creditor\": {\n    \"cdtrAgtBIC\": \"ACKPBBB0\",\n    \"currencyCd\": \"BBD\",\n    \"cdtrAcct\": \"2110000323\",\n    \"cdtrName\": \"ACK Participant\",\n    \"cdtrAgtTransit\": \"01234\",\n    \"cdtrAgtTransitLocation\": \"Main Branch\"\n  },\n  \"transaction\": {\n    \"amount\": \"1.00\",\n    \"rmtInf\": \"Maintenance\",\n    \"currency\": \"BBD\",\n    \"ctgyPurp\": \"MN\"\n  },\n  \"customParams\": {\n    \"purposeCd\": \"CB\"\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://10.28.20.168:10010/ippgat/ipp/channel/sendPayment",
+					"protocol": "https",
+					"host": [
+						"10",
+						"28",
+						"20",
+						"168"
+					],
+					"port": "10010",
+					"path": [
+						"ippgat",
+						"ipp",
+						"channel",
+						"sendPayment"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
